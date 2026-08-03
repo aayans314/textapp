@@ -1,0 +1,13 @@
+services:
+  textapp:
+    build: ../server
+    container_name: textapp
+    restart: unless-stopped
+    env_file: ../server/.env
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - textapp-data:/data
+
+volumes:
+  textapp-data:

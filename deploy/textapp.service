@@ -1,0 +1,21 @@
+[Unit]
+Description=TextApp messenger server
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/opt/textapp
+Environment=NODE_ENV=production
+EnvironmentFile=/opt/textapp/.env
+ExecStart=/usr/bin/node --disable-warning=ExperimentalWarning src/index.js
+Restart=always
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/opt/textapp/data
+
+[Install]
+WantedBy=multi-user.target
