@@ -85,4 +85,8 @@ cd android
 
 ## License
 
-MIT — do whatever you want with it.
+MIT.
+
+Aayan Shah
+Colby '28
+Dartmouth '29
