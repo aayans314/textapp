@@ -15,11 +15,11 @@ the UI. The default is already set to your VPS:
 
 ```properties
 # android/gradle.properties
-serverUrl=http://132.145.214.1:9090
+serverUrl=https://your.domain.example
 ```
 
 So a plain `./gradlew assembleRelease` produces the APK you distribute. If you
-ever move to a domain, override it at build time:
+ever need to change the backend address, override it at build time:
 
 ```bash
 ./gradlew assembleRelease -PserverUrl=https://chat.yourdomain.com

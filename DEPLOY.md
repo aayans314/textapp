@@ -4,10 +4,10 @@ Your setup:
 
 | Thing | Value |
 |---|---|
-| Server IP | `132.145.214.1` |
+| Server IP | `YOUR_VPS_IP` (see Oracle Cloud console) |
 | App port | `9090` |
 | How you connect | VS Code **Remote - SSH** extension |
-| Transport | Direct: the app is built to always call `http://132.145.214.1:9090` |
+| Transport | Direct: the app is built to always call `https://your.domain.example` (or your VPS IP + port if not using a tunnel) |
 
 Read the whole thing once before starting. Most of it is copy-paste into the VS Code remote terminal.
 
@@ -21,12 +21,12 @@ Read the whole thing once before starting. Most of it is copy-paste into the VS 
 ## 1. Connect with VS Code Remote - SSH
 
 1. Install the **Remote - SSH** extension (ID: `ms-vscode-remote.remote-ssh`).
-2. Press `Ctrl+Shift+P` → **Remote-SSH: Connect to Host…** → `ubuntu@132.145.214.1`.
-   - If your image is Oracle Linux, use `opc@132.145.214.1` instead of `ubuntu`.
+2. Press `Ctrl+Shift+P` → **Remote-SSH: Connect to Host…** → `ubuntu@YOUR_VPS_IP`.
+   - If your image is Oracle Linux, use `opc@YOUR_VPS_IP` instead of `ubuntu`.
    - If you use an SSH key, configure it once: `Ctrl+Shift+P` → **Remote-SSH: Open SSH Configuration File…** → add:
      ```text
      Host oracle
-       HostName 132.145.214.1
+       HostName YOUR_VPS_IP
        User ubuntu
        IdentityFile C:\Users\YOU\.ssh\oracle-key.pem
      ```
@@ -75,7 +75,7 @@ In the VS Code explorer (which now shows the remote filesystem), navigate into `
 Open a local PowerShell (not the VS Code remote terminal) and run:
 
 ```powershell
-scp -i C:\Users\YOU\.ssh\oracle-key.pem -r server\package.json server\package-lock.json server\src server\.env.example server\.env ubuntu@132.145.214.1:/opt/textapp/
+scp -i C:\Users\YOU\.ssh\oracle-key.pem -r server\package.json server\package-lock.json server\src server\.env.example server\.env ubuntu@YOUR_VPS_IP:/opt/textapp/
 ```
 
 **Option C — git clone**
@@ -230,9 +230,9 @@ cd /opt/textapp
 docker compose -f ../deploy/docker-compose.yml up -d
 ```
 
-## 6. Open port 9090 (required — the app talks to this IP directly)
+## 6. Open port 9090 (required — the app talks to this port on your VPS)
 
-Because the APK is baked to `http://132.145.214.1:9090`, that port must be reachable from phones:
+Because the APK is baked to connect to your server on port 9090, that port must be reachable from phones:
 
 1. **Oracle Cloud Console** → Networking → Virtual Cloud Networks → your VCN → Security List → **Add Ingress Rules**:
    - Source: `0.0.0.0/0`
@@ -243,9 +243,9 @@ Because the APK is baked to `http://132.145.214.1:9090`, that port must be reach
    sudo iptables -I INPUT -p tcp --dport 9090 -j ACCEPT
    sudo netfilter-persistent save
    ```
-3. Verify from your PC:
+3. Verify from your PC (replace `YOUR_VPS_IP` with your actual VPS IP):
    ```bash
-   curl http://132.145.214.1:9090/api/health
+   curl http://YOUR_VPS_IP:9090/api/health
    ```
 
 ## 7. Optional later: Cloudflare Tunnel + your domain
@@ -288,7 +288,7 @@ sudo systemctl status cloudflared
 
 Test: on your PC browser open `https://chat.yourdomain.com/api/health` — you should see the JSON.
 
-That's it. Your friends' APKs point at `https://chat.yourdomain.com`, traffic flows through Cloudflare, and `132.145.214.1` is never exposed — the VPS makes only an outbound connection to Cloudflare.
+That's it. Your friends' APKs point at `https://chat.yourdomain.com`, traffic flows through Cloudflare, and your VPS IP is never exposed — the VPS makes only an outbound connection to Cloudflare.
 
 ## 8. End-to-end check with a real phone
 
@@ -306,7 +306,7 @@ That's it. Your friends' APKs point at `https://chat.yourdomain.com`, traffic fl
 | Tunnel site shows 502/404 | `sudo systemctl status cloudflared`; `cloudflared tunnel list`; confirm `service: http://localhost:9090` matches the app port |
 | Friends can't install the APK | They must allow "install unknown apps" for the messenger they receive it from |
 | Push notifications don't arrive | Firebase isn't configured (everything else works) — see [docs/ANDROID_BUILD.md](docs/ANDROID_BUILD.md) |
-| Friends can't reach the server | `HOST=0.0.0.0` in `.env` + restart, Oracle Security List needs TCP 9090, iptables must allow it, then `curl http://132.145.214.1:9090/api/health` from your PC |
+| Friends can't reach the server | `HOST=0.0.0.0` in `.env` + restart, Oracle Security List needs TCP 9090, iptables must allow it, then test with `curl http://YOUR_VPS_IP:9090/api/health` from your PC |
 
 ## Backups
 

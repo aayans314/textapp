@@ -12,7 +12,7 @@ if (file("google-services.json").exists()) {
     apply(plugin = "com.google.gms.google-services")
 }
 
-val serverUrl = (project.findProperty("serverUrl") as String?) ?: "http://132.145.214.1:9090"
+val serverUrl = (project.findProperty("serverUrl") as String?) ?: "https://your.domain.example"
 
 val keystoreProps = Properties().apply {
     val f = rootProject.file("keystore.properties")

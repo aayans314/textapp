@@ -1,6 +1,6 @@
 # Deploying TextApp
 
-> The full, tailored deployment guide for your Oracle VPS (VS Code Remote-SSH, `132.145.214.1`, port 9090, Cloudflare Tunnel) lives at the repo root:
+> The full, tailored deployment guide for your Oracle VPS (VS Code Remote-SSH, your VPS IP, port 9090, Cloudflare Tunnel) lives at the repo root:
 >
 > **[DEPLOY.md](../DEPLOY.md)**
 

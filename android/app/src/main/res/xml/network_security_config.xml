@@ -7,8 +7,8 @@
         <domain includeSubdomains="false">127.0.0.1</domain>
         <domain includeSubdomains="false">localhost</domain>
     </domain-config>
-    <!-- The app's baked-in backend endpoint (plain HTTP on the VPS). -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="false">132.145.214.1</domain>
+    <!-- The app's baked-in backend endpoint. Update with your domain. -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">your.domain.example</domain>
     </domain-config>
 </network-security-config>
